@@ -1,0 +1,9 @@
+---
+alwaysApply: false
+---
+This document explains which way to manage state inside a chatGPT integration
+| State type | Owned by | Lifetime | Examples |
+| --- | --- | --- | --- |
+| Business data (authoritative) | MCP server or backend service | Long-lived | Tasks, tickets, documents |
+| UI state (ephemeral) | The widget instance inside ChatGPT | Only for the active widget | Selected row, expanded panel, sort order |
+| Cross-session state (durable) | Your backend or storage | Cross-session and cross-conversation | Saved filters, view mode, workspace selection |

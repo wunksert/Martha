@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8" />
+    <title>Products (Dev)</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/products-list.css" />
+    <style>
+      /* Simulate ChatGPT rendering environment */
+      body {
+        background: #212121 !important;
+        padding: 16px !important;
+      }
+      
+      html {
+        background: #212121 !important;
+      }
+      
+      .dev-banner {
+        background: #565869 !important;
+        color: #ececf1 !important;
+        border-bottom: 1px solid #40414f !important;
+        margin: -16px -16px 16px -16px;
+      }
+      
+      main {
+        background: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        max-width: 768px !important;
+        margin: 0 auto !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dev-banner">
+      DEV MODE — Edit <code>ui/mocks/products.json</code> to change data
+    </div>
+    <main>
+      <h2>Products</h2>
+      <div class="products-container">
+        <div id="products-grid" class="products-grid"></div>
+      </div>
+    </main>
+
+    <script type="module">
+      // Fetch mock data and stub window.openai before loading the widget
+      async function initDevMode() {
+        try {
+          const response = await fetch('/mocks/products.json');
+          if (!response.ok) {
+            throw new Error(`Failed to load mock data: ${response.status}`);
+          }
+          const mockData = await response.json();
+          
+          // Stub window.openai with mock toolOutput
+          window.openai = {
+            toolOutput: mockData,
+            toolInput: {},
+            theme: 'light',
+            locale: 'en-US',
+            maxHeight: 800,
+            displayMode: 'inline',
+            userAgent: {
+              device: { type: 'desktop' },
+              capabilities: { hover: true, touch: false }
+            },
+            safeArea: {
+              insets: { top: 0, bottom: 0, left: 0, right: 0 }
+            },
+            view: null,
+            toolResponseMetadata: null,
+            widgetState: null,
+            // Stub API methods
+            callTool: async () => ({ content: [] }),
+            requestClose: () => {},
+            sendFollowUpMessage: async () => {},
+            openExternal: () => {},
+            requestDisplayMode: async ({ mode }) => ({ mode }),
+            requestModal: async () => ({}),
+            notifyIntrinsicHeight: () => {},
+            setWidgetState: async () => {}
+          };
+
+          // Now dynamically import the widget (enables HMR)
+          await import('./widgets/ProductListWidget.tsx');
+          
+          console.log('[Dev] Mock data loaded:', mockData);
+        } catch (error) {
+          console.error('[Dev] Failed to initialize:', error);
+          document.getElementById('products-grid').innerHTML = `
+            <div class="error-state">
+              <div class="error-state-title">Failed to load mock data</div>
+              <div class="error-state-message">${error.message}</div>
+            </div>
+          `;
+        }
+      }
+
+      initDevMode();
+    </script>
+  </body>
+</html>

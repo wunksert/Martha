@@ -1,0 +1,35 @@
+{
+  "products": [
+    {
+      "id": "gid://shopify/Product/1234567890",
+      "title": "Classic Cotton T-Shirt",
+      "shop": "Acme Apparel",
+      "status": "active"
+    },
+    {
+      "id": "gid://shopify/Product/2345678901",
+      "title": "Vintage Leather Jacket",
+      "shop": "Acme Apparel",
+      "status": "active"
+    },
+    {
+      "id": "gid://shopify/Product/3456789012",
+      "title": "Summer Linen Pants",
+      "shop": "Beachside Boutique",
+      "status": "draft"
+    },
+    {
+      "id": "gid://shopify/Product/4567890123",
+      "title": "Wool Blend Sweater",
+      "shop": "Cozy Corner",
+      "status": "inactive"
+    },
+    {
+      "id": "gid://shopify/Product/5678901234",
+      "title": "Running Sneakers Pro",
+      "shop": "Athletic Edge",
+      "status": "active"
+    }
+  ]
+}
+

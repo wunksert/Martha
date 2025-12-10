@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wishlist</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <style>
+      :root {
+        color: #0b0b0f;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 16px;
+        background: #f6f8fb;
+      }
+
+      main {
+        width: 100%;
+        max-width: 600px;
+        min-height: 260px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 1.25rem;
+      }
+
+      .product-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .product-item {
+        background: #f2f4fb;
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .product-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #0b0b0f;
+      }
+
+      .product-shop {
+        font-size: 0.875rem;
+        color: #6c768a;
+      }
+
+      .product-note {
+        font-size: 0.875rem;
+        color: #4a5568;
+        font-style: italic;
+        margin-top: 4px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c768a;
+      }
+
+      .error-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #dc2626;
+        background: #fee2e2;
+        border-radius: 8px;
+        margin: 16px 0;
+      }
+
+      .error-state-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .error-state-message {
+        font-size: 0.875rem;
+        color: #991b1b;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h2>Wishlist</h2>
+      <ul id="product-list" class="product-list"></ul>
+    </main>
+
+    <script type="module">
+      (async () => {
+        try {
+          const listEl = document.querySelector("#product-list");
+          if (!listEl) {
+            throw new Error("Product list element not found");
+          }
+
+          let products = [];
+          
+          try {
+            products = Array.isArray(window.openai?.toolOutput?.products) 
+              ? [...window.openai.toolOutput.products]
+              : [];
+          } catch (error) {
+            console.warn("Failed to read initial products:", error);
+            products = [];
+          }
+
+          const render = () => {
+            try {
+              if (!listEl) return;
+              
+              listEl.innerHTML = "";
+              
+              if (products.length === 0) {
+                const emptyState = document.createElement("div");
+                emptyState.className = "empty-state";
+                emptyState.textContent = "No products in your wishlist yet.";
+                listEl.appendChild(emptyState);
+                return;
+              }
+
+              products.forEach((product) => {
+                try {
+                  if (!product || typeof product !== 'object') return;
+                  
+                  const li = document.createElement("li");
+                  li.className = "product-item";
+
+                  const title = document.createElement("div");
+                  title.className = "product-title";
+                  title.textContent = product.title || "Untitled Product";
+
+                  const shop = document.createElement("div");
+                  shop.className = "product-shop";
+                  shop.textContent = product.shop || "";
+
+                  li.appendChild(title);
+                  if (product.shop) {
+                    li.appendChild(shop);
+                  }
+
+                  if (product.note) {
+                    const note = document.createElement("div");
+                    note.className = "product-note";
+                    note.textContent = `Note: ${product.note}`;
+                    li.appendChild(note);
+                  }
+
+                  listEl.appendChild(li);
+                } catch (error) {
+                  console.error("Error rendering product:", error, product);
+                }
+              });
+            } catch (error) {
+              console.error("Error in render:", error);
+              if (listEl) {
+                listEl.innerHTML = "";
+                const errorState = document.createElement("div");
+                errorState.className = "error-state";
+                errorState.innerHTML = `
+                  <div class="error-state-title">Error loading wishlist</div>
+                  <div class="error-state-message">${error.message || "Unknown error occurred"}</div>
+                `;
+                listEl.appendChild(errorState);
+              }
+            }
+          };
+
+          const handleSetGlobals = (event) => {
+            try {
+              const globals = event?.detail?.globals;
+              if (!globals?.toolOutput?.products) return;
+              
+              if (Array.isArray(globals.toolOutput.products)) {
+                products = [...globals.toolOutput.products];
+                render();
+              }
+            } catch (error) {
+              console.error("Error handling set_globals event:", error);
+            }
+          };
+
+          window.addEventListener("openai:set_globals", handleSetGlobals, {
+            passive: true,
+          });
+
+          // Initial render
+          render();
+        } catch (error) {
+          console.error("Fatal error initializing wishlist:", error);
+          const main = document.querySelector("main");
+          if (main) {
+            main.innerHTML = `
+              <h2>Wishlist</h2>
+              <div class="error-state">
+                <div class="error-state-title">Failed to load wishlist</div>
+                <div class="error-state-message">${error.message || "Unknown error occurred"}</div>
+              </div>
+            `;
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
+
