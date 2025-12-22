@@ -12,9 +12,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         'wishlist': resolve(__dirname, 'ui/wishlist.html'),
-        'products': resolve(__dirname, 'ui/products.html'),
         'products-list': resolve(__dirname, 'ui/products-list.html'),
         'products-list-dev': resolve(__dirname, 'ui/products-list.dev.html'),
+        'todo-widget': resolve(__dirname, 'ui/todo-widget.html'),
       },
       output: {
         entryFileNames: 'assets/[name].js',

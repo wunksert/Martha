@@ -4,8 +4,8 @@
     
     <meta charset="utf-8" />
     <title>Products (Dev)</title>
-    <link rel="stylesheet" href="./styles/main.css" />
-    <link rel="stylesheet" href="./styles/products-list.css" />
+    <link rel="stylesheet" href="../main.css" />
+    <!-- <link rel="stylesheet" href="../styles/products-list.css" /> -->
     <style>
       /* Simulate ChatGPT rendering environment */
       body {
@@ -37,13 +37,15 @@
       DEV MODE — Edit <code>ui/mocks/products.json</code> to change data
     </div>
     <main>
-      <h2>Products</h2>
+      <!-- <h2>Products</h2> -->
       <div class="products-container">
         <div id="products-grid" class="products-grid"></div>
       </div>
     </main>
 
     <script type="module">
+      import { setupOpenAIStubs } from './openai-stubs.js';
+      
       // Fetch mock data and stub window.openai before loading the widget
       async function initDevMode() {
         try {
@@ -53,37 +55,11 @@
           }
           const mockData = await response.json();
           
-          // Stub window.openai with mock toolOutput
-          window.openai = {
-            toolOutput: mockData,
-            toolInput: {},
-            theme: 'light',
-            locale: 'en-US',
-            maxHeight: 800,
-            displayMode: 'inline',
-            userAgent: {
-              device: { type: 'desktop' },
-              capabilities: { hover: true, touch: false }
-            },
-            safeArea: {
-              insets: { top: 0, bottom: 0, left: 0, right: 0 }
-            },
-            view: null,
-            toolResponseMetadata: null,
-            widgetState: null,
-            // Stub API methods
-            callTool: async () => ({ content: [] }),
-            requestClose: () => {},
-            sendFollowUpMessage: async () => {},
-            openExternal: () => {},
-            requestDisplayMode: async ({ mode }) => ({ mode }),
-            requestModal: async () => ({}),
-            notifyIntrinsicHeight: () => {},
-            setWidgetState: async () => {}
-          };
+          // Setup OpenAI stubs
+          setupOpenAIStubs(mockData);
 
           // Now dynamically import the widget (enables HMR)
-          await import('./widgets/ProductListWidget.tsx');
+          await import('../widgets/ProductListWidget.tsx');
           
           console.log('[Dev] Mock data loaded:', mockData);
         } catch (error) {
@@ -101,3 +77,4 @@
     </script>
   </body>
 </html>
+

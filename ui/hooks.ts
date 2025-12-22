@@ -152,3 +152,12 @@ export function useToolInput() {
     return useOpenAiGlobal("toolInput");
 }
 
+/**
+ * Convenience hook to read theme from window.openai
+ * Returns "light" | "dark" to match the GPT background theme
+ */
+export function useTheme(): Theme {
+    const theme = useOpenAiGlobal("theme");
+    return theme ?? "dark";
+}
+

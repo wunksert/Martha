@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+---
+## todos
+1. use widget state
+
+## Best practices
+1. Color the background the same color as the theme. use getTheme hook to get 'dark' or 'light'
+2. All widgets need good loading states since the HTML is loaded immediately before the tool executes, which can take a while.
+3. Style all your react components inline using tailwindCSS
+4. In stub mode outside chatGPT, openai function stubs should provide some feedback to the user when called (but not actually invoke the tool)
+5. Make sure all mutations via tool requests are idempotent since it may retry tool calls. In practice that means:
+    - Once we decide on the idempotency key for each operation/table, make that a unique constraint in the db
+    - user upserts instead of inserts
+    - Use 'set' operations, not 'delta' operations
+        - Good: "Set quantity to N"
+        - Bad: "Increase quantity by 1"
+
+
+## Structure
+/widgets is the top-level component. They're analagous to pages in regular web apps
+/components is used normally
+/hmr-templates is for live real-time testing outside GPT
+
+## UI
+1. Refer to the gpt-ui-design rule
+
+## Updates
+4. When you change your widget’s HTML/JS/CSS in a breaking way, give the template a new URI (or use a new file name) so ChatGPT always loads the updated bundle instead of a cached one. Updates need to be propogated to tools

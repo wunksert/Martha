@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+
+When building UIs for GPT apps, always use the Apps SDK components library. The library can be found in /docs/apps-sdk-ui
+
+- Default to tailwind styles using apps SDK presets. Do not use custom styling unless absolutely necessary.
+- All styles should be fully responsive per the "Responsive Design" section under Concepts
+
+- Use Icons by default

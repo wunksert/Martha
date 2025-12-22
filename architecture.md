@@ -1,13 +1,59 @@
 # Architecture
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Interesting demos](#interesting-demos)
+- [Gotchas](#gotchas)
+- [Best Practices](#best-practices)
+- [Opportunities](#opportunities)
+- [Local UI Development](#local-ui-development)
+  - [How It Works](#how-it-works)
+  - [File Structure](#file-structure)
+  - [Usage](#usage)
+  - [Creating a New Dev Page](#creating-a-new-dev-page)
+  - [What Gets Stubbed](#what-gets-stubbed)
+- [Building](#building)
+  - [Vite vs esBuild](#vite-vs-esbuild)
+- [Technology Stack](#technology-stack)
+- [Architecture Layers](#architecture-layers)
+  - [HTTP Transport Layer](#1-http-transport-layer-srcserverts)
+  - [MCP Server Layer](#2-mcp-server-layer-srcserverts)
+  - [Tools & Resources Layer](#3-tools--resources-layer-srctoolsts)
+  - [Data Access Layer](#4-data-access-layer-srcprismats)
+- [Managing State](#managing-state)
+  - [High level data flow](#high-level-data-flow)
+  - [Types of state and how to use it](#types-of-state-and-how-to-use-it)
+- [Data Model](#data-model)
+  - [User](#user)
+  - [Product](#product)
+  - [WishlistItem](#wishlistitem)
+- [MCP Tools](#mcp-tools)
+- [MCP Resources](#mcp-resources)
+- [ChatGPT-Specific Features](#chatgpt-specific-features)
+  - [Tool Metadata (`_meta` fields)](#tool-metadata-_meta-fields)
+  - [Structured Content in Tool Responses](#structured-content-in-tool-responses)
+  - [UI Resources](#ui-resources)
+  - [Client-Side APIs (`window.openai`)](#client-side-apis-windowopenai)
+  - [Example: Complete Integration Flow](#example-complete-integration-flow)
+- [Key Design Patterns](#key-design-patterns)
+- [Project Structure](#project-structure)
+- [Database](#database)
+- [Development Workflow](#development-workflow)
+
 ## Overview
 
 This project is a **Model Context Protocol (MCP) server** that provides wishlist management functionality. It exposes tools and resources for managing products and user wishlists through the MCP protocol over HTTP.
 
+## Interesting demo ideas
+1. A partner exposes their app inside chatGPT so merchant and merchant staff can interact with it
+2. A merchant creates a custom Shopify app and creates a suite of tools for managing their store via chatGPT (discount products, etc)
+2.a A merchant creates a 
+3. A merchant creates a brand app for customers
+
 ## Gotchas
-1. NEVER use React.StrictMode
+1. doublel check React.StrictMode. some with some without.
 2. full urls for JS assets (since relative goes to OAI domains)
-3. Best practice: When you change your widget’s HTML/JS/CSS in a breaking way, give the template a new URI (or use a new file name) so ChatGPT always loads the updated bundle instead of a cached one.
 4. CORS on the server:
 ```
 app.use(cors({
@@ -15,19 +61,6 @@ app.use(cors({
     credentials: false 
 }))
 ```
-
-## Unknowns
-
-- ~~This process made us build the project each time. There must be a way to HMR or at least serve from dev?~~ **SOLVED** — see [Local UI Development](#local-ui-development) below.
-- What are all the possible _meta types for openAI? we have 
-```
-    resources[openai/widgetPrefersBorder"]: boolean, 
-    tools['openai/outputTemplate']: 'ui://widget/wishlist.html',
-    tools['openai/toolInvocation/invoking']: 'Loading wishlist',
-    toools['openai/toolInvocation/invoked']: 'Wishlist loaded',
-                etc
-```
-
 
 ## Opportunities
 - HMR for sure - one instance of the app is live at a time, and it basically just does AJAX via tools. Even if I send a new message (both same and new chat) the HTML isn't updated. I guess it's because the resource needs to get reregistered? i.e. server restarted. 
@@ -113,7 +146,7 @@ The dev HTML stubs the full `window.openai` interface:
 |----------|---------------|
 | `toolOutput` | Fetched from mock JSON |
 | `toolInput` | Empty object |
-| `theme` | `'light'` |
+| `theme` | `'dark'` |
 | `displayMode` | `'inline'` |
 | `callTool()` | No-op async function |
 | `requestClose()` | No-op |
@@ -139,12 +172,7 @@ Keep both:
 Use npm run dev:ui (Vite) for development
 Use npm run build:widget (esbuild) for the production widget bundle
 
-## Interesting demos
-1. A partner exposes their app inside chatGPT so merchant and merchant staff can interact with it
-2. A merchant creates a custom Shopify app and creates a suite of tools for managing their store via chatGPT (discount products, etc)
-2.a A merchant creates a 
 
-3. A merchant creates a brand app for customers
 
 ## Technology Stack
 
