@@ -11,9 +11,7 @@ export default defineConfig({
     target: 'es2022',
     rollupOptions: {
       input: {
-        'wishlist': resolve(__dirname, 'ui/wishlist.html'),
-        'products-list': resolve(__dirname, 'ui/products-list.html'),
-        'products-list-dev': resolve(__dirname, 'ui/products-list.dev.html'),
+        'recipes-list': resolve(__dirname, 'ui/recipes-list.html'),
         'todo-widget': resolve(__dirname, 'ui/todo-widget.html'),
       },
       output: {
@@ -28,4 +26,3 @@ export default defineConfig({
     cors: true
   }
 });
-

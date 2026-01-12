@@ -1,14 +1,18 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import * as z from 'zod/v3';
-import { listProductsHandler, getProductHandler } from './handlers/product.js';
-import { addTodoHandler, deleteAllTodos } from "./handlers/todo.js";
 import { 
-    addToWishlistHandler, 
-    removeFromWishlistHandler, 
-    addNoteHandler, 
-    viewWishlistHandler, 
-    searchProductsHandler 
-} from './handlers/wishlist.js';
+    saveRecipeHandler, 
+    listRecipesHandler, 
+    searchRecipesHandler, 
+    getRecipeHandler, 
+    getUploadGuidanceHandler 
+} from './handlers/recipe.js';
+import { 
+    updatePreferencesHandler, 
+    manageFavoritesHandler, 
+    addNoteHandler 
+} from './handlers/user.js';
+import { addTodoHandler, deleteAllTodos } from "./handlers/todo.js";
 
 export function registerTools(server: McpServer): void {
 
@@ -33,7 +37,7 @@ export function registerTools(server: McpServer): void {
             title: "Delete all Todos",
             description: "Deletes all the to-do items from the user's to-do list",
             _meta: {
-                // "openai/visibility": "private", //hide this disasterously destructive action from the LLM
+                // "openai/visibility": "private", 
             },
             annotations: {
                 destructiveHint: true
@@ -42,177 +46,136 @@ export function registerTools(server: McpServer): void {
         deleteAllTodos as any
     )
 
-    // Tool: List Products
+    // --- Recipe Tools ---
+
     server.registerTool(
-        'list_products',
+        "save_recipe",
         {
-            title: 'List Products',
-            description: 'List all the available products from the brand. These are products that the user can add to their wishlist, but are not necessariliy already on their wishlist.',
-            outputSchema: z.object({
-                products: z.array(z.object({
-                    id: z.string(),
-                    shopifyId: z.string(),
-                    title: z.string(),
-                    shop: z.string(),
-                    status: z.string()
+            title: "Save Recipe",
+            description: "Save a new recipe with structured ingredients and steps.",
+            inputSchema: z.object({
+                title: z.string(),
+                description: z.string().optional(),
+                prepTime: z.number().optional(),
+                cookTime: z.number().optional(),
+                servings: z.number().optional(),
+                sourceUrl: z.string().optional(),
+                ingredients: z.array(z.object({
+                    name: z.string(),
+                    quantity: z.number().optional(),
+                    unit: z.string().optional()
+                })),
+                steps: z.array(z.object({
+                    order: z.number(),
+                    text: z.string()
                 }))
-            }) as any,
+            }) as any
+        },
+        saveRecipeHandler as any
+    );
+
+    server.registerTool(
+        "list_recipes",
+        {
+            title: "List Recipes",
+            description: "List all available recipes.",
             _meta: {
-                'openai/outputTemplate': 'ui://widget/products-list.html',
-                'openai/toolInvocation/invoking': 'Loading products',
-                'openai/toolInvocation/invoked': 'Products loaded',
+                'openai/outputTemplate': 'ui://widget/recipes-list.html',
+                'openai/toolInvocation/invoking': 'Loading recipes',
+                'openai/toolInvocation/invoked': 'Recipes loaded',
             },
             annotations: {
                 readOnlyHint: true
             }
         },
-        listProductsHandler as any
+        listRecipesHandler as any
     );
 
-    // Tool: Read Product
     server.registerTool(
-        'read_product',
+        "search_recipes",
         {
-            title: 'Read Product',
-            description: "Request detailed information on a specific product.",
-            inputSchema: {
-                id: z.string().optional(),
-                shopifyId: z.string().optional()
-            } as any,
+            title: "Search Recipes",
+            description: "Search recipes by title, description, or ingredients.",
+            inputSchema: z.object({
+                query: z.string()
+            }) as any,
             outputSchema: z.object({
-                product: z.object({
+                recipes: z.array(z.object({
                     id: z.string(),
-                    shopifyId: z.string(),
                     title: z.string(),
-                    shop: z.string(),
-                    status: z.string(),
-                    description: z.string().nullable(),
-                    createdAt: z.string()
-                })
+                    description: z.string().optional()
+                }))
             }) as any
         },
-        getProductHandler as any
+        searchRecipesHandler as any
     );
 
-    // Tool: Add Product to Wishlist
     server.registerTool(
-        'add_product_to_wishlist',
+        "get_recipe",
         {
-            title: 'Add Product to Wishlist',
-            description: 'Add a product to a user\'s wishlist by product ID. Creates user if they don\'t exist. Product must already exist in the database.',
-            inputSchema: {
-                email: z.string(),
-                productId: z.string()
-            } as any,
-            outputSchema: z.object({ 
-                id: z.string(), 
-                shopifyId: z.string(), 
-                title: z.string(), 
-                note: z.string().nullable(),
-                createdAt: z.string() 
+            title: "Get Recipe",
+            description: "Get full details of a specific recipe.",
+            inputSchema: z.object({
+                id: z.string()
             }) as any
         },
-        addToWishlistHandler as any
+        getRecipeHandler as any
     );
 
-    // Tool: Remove Product from Wishlist
     server.registerTool(
-        'remove_product_from_wishlist',
+        "get_upload_guidance",
         {
-            title: 'Remove Product from Wishlist',
-            description: 'Remove a product from a user\'s wishlist. Creates user if they don\'t exist.',
-            inputSchema: {
+            title: "Get Upload Guidance",
+            description: "Get instructions on how to upload recipes.",
+            annotations: {
+                readOnlyHint: true
+            }
+        },
+        getUploadGuidanceHandler as any
+    );
+
+    // --- User Tools ---
+
+    server.registerTool(
+        "update_preferences",
+        {
+            title: "Update Preferences",
+            description: "Update user food likes and dislikes.",
+            inputSchema: z.object({
                 email: z.string(),
-                productId: z.string().optional(),
-                shopifyId: z.string().optional()
-            } as any,
-            outputSchema: z.object({ 
-                success: z.boolean(),
-                message: z.string()
+                likes: z.array(z.string()).optional(),
+                dislikes: z.array(z.string()).optional()
             }) as any
         },
-        removeFromWishlistHandler as any
+        updatePreferencesHandler as any
     );
 
-    // Tool: Add Note
     server.registerTool(
-        'add_note',
+        "manage_favorites",
         {
-            title: 'Add Note',
-            description: 'Add or update a note for a product in the wishlist. Creates user if they don\'t exist.',
-            inputSchema: {
+            title: "Manage Favorites",
+            description: "Add or remove a recipe from favorites.",
+            inputSchema: z.object({
                 email: z.string(),
-                productId: z.string().optional(),
-                shopifyId: z.string().optional(),
-                note: z.string()
-            } as any,
-            outputSchema: z.object({ 
-                id: z.string(),
-                shopifyId: z.string(),
-                title: z.string(),
-                note: z.string().nullable(),
-                updatedAt: z.string()
+                recipeId: z.string(),
+                action: z.enum(['add', 'remove'])
+            }) as any
+        },
+        manageFavoritesHandler as any
+    );
+
+    server.registerTool(
+        "add_note",
+        {
+            title: "Add Note",
+            description: "Add a note to a recipe or a specific step.",
+            inputSchema: z.object({
+                email: z.string(),
+                recipeId: z.string(),
+                stepId: z.string().optional(),
+                text: z.string()
             }) as any
         },
         addNoteHandler as any
     );
-
-    // Tool: View List
-    server.registerTool(
-        'view_wishlist',
-        {
-            title: 'View List',
-            description: 'View all products in a user\'s wishlist. Creates user if they don\'t exist.',
-            inputSchema: {
-                email: z.string()
-            } as any,
-            outputSchema: z.object({
-                products: z.array(z.object({
-                    id: z.string(),
-                    shopifyId: z.string(),
-                    title: z.string(),
-                    shop: z.string(),
-                    status: z.string(),
-                    note: z.string().nullable(),
-                    createdAt: z.string()
-                }))
-            }) as any,
-            _meta: {
-                'openai/outputTemplate': 'ui://widget/wishlist.html',
-                'openai/toolInvocation/invoking': 'Loading wishlist',
-                'openai/toolInvocation/invoked': 'Wishlist loaded',
-            },
-            annotations: {
-                readOnlyHint: true
-            }
-        },
-        viewWishlistHandler as any
-    );
-
-    // Tool: Search Products
-    server.registerTool(
-        'search_products',
-        {
-            title: 'Search Products',
-            description: 'Search products in a user\'s wishlist by title, description, or note. Creates user if they don\'t exist.',
-            inputSchema: {
-                email: z.string(),
-                query: z.string()
-            } as any,
-            outputSchema: z.object({
-                products: z.array(z.object({
-                    id: z.string(),
-                    shopifyId: z.string(),
-                    title: z.string(),
-                    shop: z.string(),
-                    status: z.string(),
-                    description: z.string().nullable(),
-                    note: z.string().nullable(),
-                    createdAt: z.string()
-                }))
-            }) as any
-        },
-        searchProductsHandler as any
-    );
 }
-

@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc && vite build",
     "build:ui": "vite build",
-    "build:product_list_widget": "esbuild ui/widgets/ProductListWidget.tsx --bundle --format=esm --jsx=automatic --outfile=dist/ui/assets/products-list.js",
     "build:server": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx --watch src/server.ts",

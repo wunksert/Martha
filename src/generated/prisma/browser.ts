@@ -23,15 +23,35 @@ export * from './enums.js';
  */
 export type User = Prisma.UserModel
 /**
- * Model WishlistItem
+ * Model Recipe
  * 
  */
-export type WishlistItem = Prisma.WishlistItemModel
+export type Recipe = Prisma.RecipeModel
 /**
- * Model Product
+ * Model Ingredient
  * 
  */
-export type Product = Prisma.ProductModel
+export type Ingredient = Prisma.IngredientModel
+/**
+ * Model InstructionStep
+ * 
+ */
+export type InstructionStep = Prisma.InstructionStepModel
+/**
+ * Model Favorite
+ * 
+ */
+export type Favorite = Prisma.FavoriteModel
+/**
+ * Model RecipeNote
+ * 
+ */
+export type RecipeNote = Prisma.RecipeNoteModel
+/**
+ * Model StepNote
+ * 
+ */
+export type StepNote = Prisma.StepNoteModel
 /**
  * Model ToDo
  * 

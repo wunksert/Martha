@@ -50,8 +50,12 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
-  WishlistItem: 'WishlistItem',
-  Product: 'Product',
+  Recipe: 'Recipe',
+  Ingredient: 'Ingredient',
+  InstructionStep: 'InstructionStep',
+  Favorite: 'Favorite',
+  RecipeNote: 'RecipeNote',
+  StepNote: 'StepNote',
   ToDo: 'ToDo'
 } as const
 
@@ -71,6 +75,8 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  likes: 'likes',
+  dislikes: 'dislikes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -78,36 +84,74 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const WishlistItemScalarFieldEnum = {
+export const RecipeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  prepTime: 'prepTime',
+  cookTime: 'cookTime',
+  servings: 'servings',
+  sourceUrl: 'sourceUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
+
+
+export const IngredientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  quantity: 'quantity',
+  unit: 'unit',
+  recipeId: 'recipeId'
+} as const
+
+export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
+
+
+export const InstructionStepScalarFieldEnum = {
+  id: 'id',
+  order: 'order',
+  text: 'text',
+  recipeId: 'recipeId'
+} as const
+
+export type InstructionStepScalarFieldEnum = (typeof InstructionStepScalarFieldEnum)[keyof typeof InstructionStepScalarFieldEnum]
+
+
+export const FavoriteScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  productId: 'productId',
-  note: 'note',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  recipeId: 'recipeId',
+  createdAt: 'createdAt'
 } as const
 
-export type WishlistItemScalarFieldEnum = (typeof WishlistItemScalarFieldEnum)[keyof typeof WishlistItemScalarFieldEnum]
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
 
 
-export const ProductScalarFieldEnum = {
+export const RecipeNoteScalarFieldEnum = {
   id: 'id',
-  shopifyId: 'shopifyId',
-  shop: 'shop',
-  title: 'title',
-  handle: 'handle',
-  status: 'status',
-  description: 'description',
-  descriptionHtml: 'descriptionHtml',
-  compareAtPriceMin: 'compareAtPriceMin',
-  compareAtPriceMax: 'compareAtPriceMax',
-  compareAtPriceCurrencyCode: 'compareAtPriceCurrencyCode',
-  media: 'media',
+  userId: 'userId',
+  recipeId: 'recipeId',
+  text: 'text',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+export type RecipeNoteScalarFieldEnum = (typeof RecipeNoteScalarFieldEnum)[keyof typeof RecipeNoteScalarFieldEnum]
+
+
+export const StepNoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  stepId: 'stepId',
+  text: 'text',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StepNoteScalarFieldEnum = (typeof StepNoteScalarFieldEnum)[keyof typeof StepNoteScalarFieldEnum]
 
 
 export const ToDoScalarFieldEnum = {

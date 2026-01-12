@@ -47,34 +47,23 @@ type CallToolResponse = {
 };
 
 type API<WidgetState extends UnknownObject = UnknownObject> = {
-  /** Calls a tool on your MCP. Returns the full response. */
   callTool: (
     name: string,
     args: Record<string, unknown>
   ) => Promise<CallToolResponse>;
 
-  /** Ask the host to close the widget container */
   requestClose: () => void;
 
-  /** Triggers a followup turn in the ChatGPT conversation */
   sendFollowUpMessage: (args: { prompt: string }) => Promise<void>;
 
-  /** Opens an external link, redirects web page or mobile app */
   openExternal: (payload: { href: string }) => void;
 
-  /** For transitioning an app from inline to fullscreen or pip */
   requestDisplayMode: (args: { mode: DisplayMode }) => Promise<{
-    /**
-     * The granted display mode. The host may reject the request.
-     * For mobile, PiP is always coerced to fullscreen.
-     */
     mode: DisplayMode;
   }>;
 
-  /** Spawn a modal owned by ChatGPT */
   requestModal: (args: unknown) => Promise<unknown>;
 
-  /** Report dynamic widget heights to avoid scroll clipping */
   notifyIntrinsicHeight: (height: number) => void;
 
   setWidgetState: (state: WidgetState) => Promise<void>;
@@ -100,8 +89,6 @@ declare global {
 
 /**
  * Hook to subscribe to a single global value from window.openai.
- * Listens for host openai:set_globals events and lets React components
- * subscribe to a single global value.
  */
 export function useOpenAiGlobal<K extends keyof OpenAiGlobals>(
   key: K
@@ -125,20 +112,15 @@ export function useOpenAiGlobal<K extends keyof OpenAiGlobals>(
       };
     },
     () => {
-      // Ensure window.openai exists and has the key
       if (!window.openai) {
         return null;
       }
-      // Type guard to ensure we're accessing globals, not API methods
       const value = (window.openai as any)[key];
       return value ?? null;
     }
   );
 }
 
-/**
- * Convenience hook to read toolOutput from window.openai
- */
 export function useToolOutput<T = unknown>() {
   const output = useOpenAiGlobal("toolOutput");
   return (output as T) || null;
@@ -149,41 +131,29 @@ export function useToolInput<T = unknown>() {
     return (input as T) || null;
 }
 
-/**
- * Convenience hook to read theme from window.openai
- * Returns "light" | "dark" to match the GPT background theme
- */
 export function useTheme(): Theme {
     const theme = useOpenAiGlobal("theme");
     return (theme as Theme) ?? "dark";
 }
 
-/**
- * Hook to manage widget state, syncing with host window.openai.widgetState.
- */
 export function useWidgetState<T extends UnknownObject>(initialState: T) {
   const hostState = useOpenAiGlobal("widgetState") as T | null;
   const [localState, setLocalState] = useState<T>(initialState);
 
-  // Sync from host to local
   useEffect(() => {
     if (hostState) {
       setLocalState((prev) => {
-          // Simple shallow comparison or deep check could go here
-          // For now, just update if different
           return { ...prev, ...hostState };
       });
     }
   }, [hostState]);
 
-  // Sync from local to host
   const setWidgetState = useCallback(async (newState: Partial<T> | ((prev: T) => Partial<T>)) => {
       setLocalState((prev) => {
           const next = typeof newState === 'function' 
               ? { ...prev, ...newState(prev) }
               : { ...prev, ...newState };
           
-          // Fire and forget update to host
           if (window.openai?.setWidgetState) {
               window.openai.setWidgetState(next).catch(console.error);
           }
@@ -194,9 +164,6 @@ export function useWidgetState<T extends UnknownObject>(initialState: T) {
   return [localState, setWidgetState] as const;
 }
 
-/**
- * Hook for typed widget props (tool output)
- */
 export function useWidgetProps<T>() {
     return useToolOutput<T>();
 }

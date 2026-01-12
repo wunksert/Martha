@@ -27,6 +27,8 @@ export type AggregateUser = {
 export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
+  likes: string | null
+  dislikes: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -34,6 +36,8 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  likes: string | null
+  dislikes: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,6 +45,8 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   email: number
+  likes: number
+  dislikes: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -50,6 +56,8 @@ export type UserCountAggregateOutputType = {
 export type UserMinAggregateInputType = {
   id?: true
   email?: true
+  likes?: true
+  dislikes?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -57,6 +65,8 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   email?: true
+  likes?: true
+  dislikes?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -64,6 +74,8 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   email?: true
+  likes?: true
+  dislikes?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -144,6 +156,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
+  likes: string
+  dislikes: string
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -172,17 +186,25 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  likes?: Prisma.StringFilter<"User"> | string
+  dislikes?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  wishlistItems?: Prisma.WishlistItemListRelationFilter
+  favorites?: Prisma.FavoriteListRelationFilter
+  recipeNotes?: Prisma.RecipeNoteListRelationFilter
+  stepNotes?: Prisma.StepNoteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  likes?: Prisma.SortOrder
+  dislikes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  wishlistItems?: Prisma.WishlistItemOrderByRelationAggregateInput
+  favorites?: Prisma.FavoriteOrderByRelationAggregateInput
+  recipeNotes?: Prisma.RecipeNoteOrderByRelationAggregateInput
+  stepNotes?: Prisma.StepNoteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -191,14 +213,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  likes?: Prisma.StringFilter<"User"> | string
+  dislikes?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  wishlistItems?: Prisma.WishlistItemListRelationFilter
+  favorites?: Prisma.FavoriteListRelationFilter
+  recipeNotes?: Prisma.RecipeNoteListRelationFilter
+  stepNotes?: Prisma.StepNoteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  likes?: Prisma.SortOrder
+  dislikes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -212,6 +240,8 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  likes?: Prisma.StringWithAggregatesFilter<"User"> | string
+  dislikes?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -219,38 +249,56 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   email: string
+  likes?: string
+  dislikes?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  recipeNotes?: Prisma.RecipeNoteCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
   email: string
+  likes?: string
+  dislikes?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  recipeNotes?: Prisma.RecipeNoteUncheckedCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  recipeNotes?: Prisma.RecipeNoteUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  recipeNotes?: Prisma.RecipeNoteUncheckedUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
   email: string
+  likes?: string
+  dislikes?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -258,6 +306,8 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -265,6 +315,8 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -272,6 +324,8 @@ export type UserUncheckedUpdateManyInput = {
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  likes?: Prisma.SortOrder
+  dislikes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -279,6 +333,8 @@ export type UserCountOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  likes?: Prisma.SortOrder
+  dislikes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -286,6 +342,8 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  likes?: Prisma.SortOrder
+  dislikes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -303,62 +361,226 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutWishlistItemsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutWishlistItemsInput, Prisma.UserUncheckedCreateWithoutWishlistItemsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWishlistItemsInput
+export type UserCreateNestedOneWithoutFavoritesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutWishlistItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutWishlistItemsInput, Prisma.UserUncheckedCreateWithoutWishlistItemsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWishlistItemsInput
-  upsert?: Prisma.UserUpsertWithoutWishlistItemsInput
+export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritesInput
+  upsert?: Prisma.UserUpsertWithoutFavoritesInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWishlistItemsInput, Prisma.UserUpdateWithoutWishlistItemsInput>, Prisma.UserUncheckedUpdateWithoutWishlistItemsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritesInput, Prisma.UserUpdateWithoutFavoritesInput>, Prisma.UserUncheckedUpdateWithoutFavoritesInput>
 }
 
-export type UserCreateWithoutWishlistItemsInput = {
+export type UserCreateNestedOneWithoutRecipeNotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecipeNotesInput, Prisma.UserUncheckedCreateWithoutRecipeNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecipeNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRecipeNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecipeNotesInput, Prisma.UserUncheckedCreateWithoutRecipeNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecipeNotesInput
+  upsert?: Prisma.UserUpsertWithoutRecipeNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecipeNotesInput, Prisma.UserUpdateWithoutRecipeNotesInput>, Prisma.UserUncheckedUpdateWithoutRecipeNotesInput>
+}
+
+export type UserCreateNestedOneWithoutStepNotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStepNotesInput, Prisma.UserUncheckedCreateWithoutStepNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStepNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStepNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStepNotesInput, Prisma.UserUncheckedCreateWithoutStepNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStepNotesInput
+  upsert?: Prisma.UserUpsertWithoutStepNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStepNotesInput, Prisma.UserUpdateWithoutStepNotesInput>, Prisma.UserUncheckedUpdateWithoutStepNotesInput>
+}
+
+export type UserCreateWithoutFavoritesInput = {
   id?: string
   email: string
+  likes?: string
+  dislikes?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  recipeNotes?: Prisma.RecipeNoteCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutWishlistItemsInput = {
+export type UserUncheckedCreateWithoutFavoritesInput = {
   id?: string
   email: string
+  likes?: string
+  dislikes?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  recipeNotes?: Prisma.RecipeNoteUncheckedCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutWishlistItemsInput = {
+export type UserCreateOrConnectWithoutFavoritesInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutWishlistItemsInput, Prisma.UserUncheckedCreateWithoutWishlistItemsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>
 }
 
-export type UserUpsertWithoutWishlistItemsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutWishlistItemsInput, Prisma.UserUncheckedUpdateWithoutWishlistItemsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutWishlistItemsInput, Prisma.UserUncheckedCreateWithoutWishlistItemsInput>
+export type UserUpsertWithoutFavoritesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFavoritesInput, Prisma.UserUncheckedUpdateWithoutFavoritesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutWishlistItemsInput = {
+export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutWishlistItemsInput, Prisma.UserUncheckedUpdateWithoutWishlistItemsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFavoritesInput, Prisma.UserUncheckedUpdateWithoutFavoritesInput>
 }
 
-export type UserUpdateWithoutWishlistItemsInput = {
+export type UserUpdateWithoutFavoritesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipeNotes?: Prisma.RecipeNoteUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutWishlistItemsInput = {
+export type UserUncheckedUpdateWithoutFavoritesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipeNotes?: Prisma.RecipeNoteUncheckedUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRecipeNotesInput = {
+  id?: string
+  email: string
+  likes?: string
+  dislikes?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRecipeNotesInput = {
+  id?: string
+  email: string
+  likes?: string
+  dislikes?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  stepNotes?: Prisma.StepNoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRecipeNotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecipeNotesInput, Prisma.UserUncheckedCreateWithoutRecipeNotesInput>
+}
+
+export type UserUpsertWithoutRecipeNotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRecipeNotesInput, Prisma.UserUncheckedUpdateWithoutRecipeNotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecipeNotesInput, Prisma.UserUncheckedCreateWithoutRecipeNotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRecipeNotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRecipeNotesInput, Prisma.UserUncheckedUpdateWithoutRecipeNotesInput>
+}
+
+export type UserUpdateWithoutRecipeNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRecipeNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  stepNotes?: Prisma.StepNoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStepNotesInput = {
+  id?: string
+  email: string
+  likes?: string
+  dislikes?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  recipeNotes?: Prisma.RecipeNoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStepNotesInput = {
+  id?: string
+  email: string
+  likes?: string
+  dislikes?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  recipeNotes?: Prisma.RecipeNoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStepNotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStepNotesInput, Prisma.UserUncheckedCreateWithoutStepNotesInput>
+}
+
+export type UserUpsertWithoutStepNotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStepNotesInput, Prisma.UserUncheckedUpdateWithoutStepNotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStepNotesInput, Prisma.UserUncheckedCreateWithoutStepNotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStepNotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStepNotesInput, Prisma.UserUncheckedUpdateWithoutStepNotesInput>
+}
+
+export type UserUpdateWithoutStepNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  recipeNotes?: Prisma.RecipeNoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStepNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  likes?: Prisma.StringFieldUpdateOperationsInput | string
+  dislikes?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  recipeNotes?: Prisma.RecipeNoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -367,11 +589,15 @@ export type UserUncheckedUpdateWithoutWishlistItemsInput = {
  */
 
 export type UserCountOutputType = {
-  wishlistItems: number
+  favorites: number
+  recipeNotes: number
+  stepNotes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  wishlistItems?: boolean | UserCountOutputTypeCountWishlistItemsArgs
+  favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
+  recipeNotes?: boolean | UserCountOutputTypeCountRecipeNotesArgs
+  stepNotes?: boolean | UserCountOutputTypeCountStepNotesArgs
 }
 
 /**
@@ -387,23 +613,43 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountWishlistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WishlistItemWhereInput
+export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FavoriteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRecipeNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecipeNoteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStepNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StepNoteWhereInput
 }
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  likes?: boolean
+  dislikes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  wishlistItems?: boolean | Prisma.User$wishlistItemsArgs<ExtArgs>
+  favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
+  recipeNotes?: boolean | Prisma.User$recipeNotesArgs<ExtArgs>
+  stepNotes?: boolean | Prisma.User$stepNotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  likes?: boolean
+  dislikes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -411,6 +657,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  likes?: boolean
+  dislikes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -418,13 +666,17 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   email?: boolean
+  likes?: boolean
+  dislikes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "likes" | "dislikes" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  wishlistItems?: boolean | Prisma.User$wishlistItemsArgs<ExtArgs>
+  favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
+  recipeNotes?: boolean | Prisma.User$recipeNotesArgs<ExtArgs>
+  stepNotes?: boolean | Prisma.User$stepNotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -433,11 +685,15 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
+    favorites: Prisma.$FavoritePayload<ExtArgs>[]
+    recipeNotes: Prisma.$RecipeNotePayload<ExtArgs>[]
+    stepNotes: Prisma.$StepNotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
+    likes: string
+    dislikes: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -834,7 +1090,9 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  wishlistItems<T extends Prisma.User$wishlistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  favorites<T extends Prisma.User$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recipeNotes<T extends Prisma.User$recipeNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recipeNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stepNotes<T extends Prisma.User$stepNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stepNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StepNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -866,6 +1124,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly likes: Prisma.FieldRef<"User", 'String'>
+  readonly dislikes: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1254,27 +1514,75 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.wishlistItems
+ * User.favorites
  */
-export type User$wishlistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$favoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the WishlistItem
+   * Select specific fields to fetch from the Favorite
    */
-  select?: Prisma.WishlistItemSelect<ExtArgs> | null
+  select?: Prisma.FavoriteSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the WishlistItem
+   * Omit specific fields from the Favorite
    */
-  omit?: Prisma.WishlistItemOmit<ExtArgs> | null
+  omit?: Prisma.FavoriteOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WishlistItemInclude<ExtArgs> | null
-  where?: Prisma.WishlistItemWhereInput
-  orderBy?: Prisma.WishlistItemOrderByWithRelationInput | Prisma.WishlistItemOrderByWithRelationInput[]
-  cursor?: Prisma.WishlistItemWhereUniqueInput
+  include?: Prisma.FavoriteInclude<ExtArgs> | null
+  where?: Prisma.FavoriteWhereInput
+  orderBy?: Prisma.FavoriteOrderByWithRelationInput | Prisma.FavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.FavoriteWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.WishlistItemScalarFieldEnum | Prisma.WishlistItemScalarFieldEnum[]
+  distinct?: Prisma.FavoriteScalarFieldEnum | Prisma.FavoriteScalarFieldEnum[]
+}
+
+/**
+ * User.recipeNotes
+ */
+export type User$recipeNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecipeNote
+   */
+  select?: Prisma.RecipeNoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecipeNote
+   */
+  omit?: Prisma.RecipeNoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecipeNoteInclude<ExtArgs> | null
+  where?: Prisma.RecipeNoteWhereInput
+  orderBy?: Prisma.RecipeNoteOrderByWithRelationInput | Prisma.RecipeNoteOrderByWithRelationInput[]
+  cursor?: Prisma.RecipeNoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecipeNoteScalarFieldEnum | Prisma.RecipeNoteScalarFieldEnum[]
+}
+
+/**
+ * User.stepNotes
+ */
+export type User$stepNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StepNote
+   */
+  select?: Prisma.StepNoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StepNote
+   */
+  omit?: Prisma.StepNoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StepNoteInclude<ExtArgs> | null
+  where?: Prisma.StepNoteWhereInput
+  orderBy?: Prisma.StepNoteOrderByWithRelationInput | Prisma.StepNoteOrderByWithRelationInput[]
+  cursor?: Prisma.StepNoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StepNoteScalarFieldEnum | Prisma.StepNoteScalarFieldEnum[]
 }
 
 /**

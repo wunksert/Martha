@@ -12,55 +12,102 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  wishlistItems WishlistItem[]
+  id          String       @id @default(uuid())
+  email       String       @unique
+  likes       String       @default("[]") // JSON string array
+  dislikes    String       @default("[]") // JSON string array
+  favorites   Favorite[]
+  recipeNotes RecipeNote[]
+  stepNotes   StepNote[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   
   @@index([email])
 }
 
-model WishlistItem {
+model Recipe {
+  id              String            @id @default(uuid())
+  title           String
+  description     String?
+  prepTime        Int?              // in minutes
+  cookTime        Int?              // in minutes
+  servings        Int?
+  sourceUrl       String?
+  ingredients     Ingredient[]
+  steps           InstructionStep[]
+  favorites       Favorite[]
+  notes           RecipeNote[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Ingredient {
+  id       String @id @default(uuid())
+  name     String
+  quantity Float?
+  unit     String?
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  
+  @@index([recipeId])
+}
+
+model InstructionStep {
+  id       String     @id @default(uuid())
+  order    Int
+  text     String
+  recipeId String
+  recipe   Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  notes    StepNote[]
+  
+  @@index([recipeId])
+}
+
+model Favorite {
   id        String   @id @default(uuid())
   userId    String
-  productId String
-  note      String?  // User's note for this wishlist item
+  recipeId  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, recipeId])
+  @@index([userId])
+  @@index([recipeId])
+}
+
+model RecipeNote {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   
-  @@unique([userId, productId]) // Prevent duplicate wishlist entries
   @@index([userId])
-  @@index([productId])
+  @@index([recipeId])
 }
 
-
-model Product {
-  id                        String         @id @default(uuid())
-  shopifyId                 String         @unique
-  shop                      String
-  title                     String
-  handle                    String
-  status                    String
-  description               String?
-  descriptionHtml           String? // HTML content
-  compareAtPriceMin         String?
-  compareAtPriceMax         String?
-  compareAtPriceCurrencyCode String?
-  media                     String? // JSON array of media objects
-  createdAt                 DateTime       @default(now())
-  updatedAt                 DateTime       @updatedAt
-  wishlistItems             WishlistItem[]
+model StepNote {
+  id        String          @id @default(uuid())
+  userId    String
+  stepId    String
+  text      String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  step      InstructionStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
   
-  @@index([shop])
+  @@index([userId])
+  @@index([stepId])
 }
 
 model ToDo {
   id        String   @id @default(uuid())
   title     String
-  completed Boolean @default(false)
+  completed Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
