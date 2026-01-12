@@ -100,6 +100,12 @@ out/
 # Uncomment if you don't want to commit generated Prisma client
 # src/generated/
 
+# Prisma binary files (should not be committed)
+**/*.node
+**/*.dylib
+**/*.so
+**/libquery_engine*
+
 # MCP inspector
 .mcp/
 
